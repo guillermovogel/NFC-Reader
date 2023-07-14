@@ -1,4 +1,4 @@
-package com.vogel.components.ui.theme
+package com.vogel.nfc_reader.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

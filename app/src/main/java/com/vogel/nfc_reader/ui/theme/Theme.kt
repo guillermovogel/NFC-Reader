@@ -5,9 +5,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import com.vogel.components.ui.theme.Blue
-import com.vogel.components.ui.theme.Orange
-import com.vogel.components.ui.theme.Shapes
 
 private val DarkColorPalette = darkColors(
     primary = Blue,
