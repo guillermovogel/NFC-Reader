@@ -32,6 +32,9 @@ internal class CardReaderImpl constructor(
 
     override fun getCard(isoDep: IsoDep): CardData = getCardResult(isoDep).getOrElse { EMPTY_CARD }
 
+    /**
+     * Get card data from NFC card, and map it to [CardData]
+     */
     override fun getCardResult(isoDep: IsoDep): Result<CardData> {
         return runCatching {
             isoDep.connect()
@@ -46,6 +49,9 @@ internal class CardReaderImpl constructor(
             }
     }
 
+    /**
+    * Open NFC settings in the device
+    */
     override fun openSettings(context: Context) {
         context.startActivity(intentProvider.settings())
     }

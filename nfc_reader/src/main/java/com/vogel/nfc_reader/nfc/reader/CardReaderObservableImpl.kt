@@ -78,7 +78,7 @@ internal class CardReaderObservableImpl constructor(
         cardReader.openSettings(context)
     }
 
-    /*
+    /**
     * When a tag is discovered, this function is called.
     * If the tag is successfully read, then the result is emitted, otherwise
     * an error is emitted with the corresponding error message.
