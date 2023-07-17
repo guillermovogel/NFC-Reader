@@ -1,4 +1,4 @@
-package com.vogel.nfc_reader.nfc.reader
+package com.vogel.nfc_reader.nfc.implementations
 
 import android.app.Activity
 import android.content.Context
@@ -7,25 +7,27 @@ import android.nfc.Tag
 import android.nfc.TagLostException
 import android.nfc.tech.IsoDep
 import com.vogel.nfc_reader.nfc.api.CardReader
-import com.vogel.nfc_reader.nfc.api.CardReaderObservable
+import com.vogel.nfc_reader.nfc.api.CardReaderListener
 import com.vogel.nfc_reader.nfc.utils.NFCState
 import com.vogel.nfc_reader.nfc.utils.NFCUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-// This class is responsible for observing the NFC state of the user's device.
-// It is also responsible for reading the NFC card and returning the result.
-internal class CardReaderObservableImpl constructor(
+/**
+ * This class is responsible for observing the NFC state of the user's device.
+ * It is also responsible for reading the NFC card and returning the result.
+ */
+class ListenerImplementation constructor(
     private val cardReader: CardReader
-) : CardReaderObservable, NfcAdapter.ReaderCallback {
+) : CardReaderListener, NfcAdapter.ReaderCallback {
 
     private var adapter: NfcAdapter? = null
 
-    private val _event = MutableStateFlow<NFCState?>(null)
+    private val _nfcStatus = MutableStateFlow<NFCState?>(null)
 
-    override val event: Flow<NFCState>
-        get() = _event.filterNotNull()
+    override val nfcStatus: Flow<NFCState>
+        get() = _nfcStatus.filterNotNull()
 
     /**
      * This function starts the NFC reader to scan for NFC cards.
@@ -37,16 +39,16 @@ internal class CardReaderObservableImpl constructor(
         adapter = NFCUtils.getNfcAdapter(activity)?.apply {
             // NFC Supported
             if (!isEnabled) {
-                _event.tryEmit(NFCState.Disabled)
+                _nfcStatus.tryEmit(NFCState.Disabled)
                 adapter = null
                 return
             }
             if (adapter == null) {
-                _event.tryEmit(NFCState.ReadyToScan)
+                _nfcStatus.tryEmit(NFCState.ReadyToScan)
             }
         } ?: run {
             // NFC Not Supported
-            _event.tryEmit(NFCState.NotSupported)
+            _nfcStatus.tryEmit(NFCState.NotSupported)
             null
         }
 
@@ -73,20 +75,21 @@ internal class CardReaderObservableImpl constructor(
     /**
      * This function allows the user to open the NFC settings on their device
      * if they have NFC disabled, in order to enable it.
+     * This function can be removed if not necessary.
      */
     override fun openSettings(context: Context) {
         cardReader.openSettings(context)
     }
 
     /**
-    * When a tag is discovered, this function is called.
+    * When a tag is discovered or detected, this function is called.
     * If the tag is successfully read, then the result is emitted, otherwise
     * an error is emitted with the corresponding error message.
     */
     override fun onTagDiscovered(tag: Tag?) {
-        _event.tryEmit(NFCState.StartReading)
+        _nfcStatus.tryEmit(NFCState.StartReading)
         val isoDep = IsoDep.get(tag)
-        val resultEvent = cardReader.getCardResult(isoDep).fold(
+        val scanCardResult = cardReader.getCardResult(isoDep).fold(
             onSuccess = NFCState::Success,
             onFailure = {
                 when (it) {
@@ -95,6 +98,6 @@ internal class CardReaderObservableImpl constructor(
                 }
             }
         )
-        _event.tryEmit(resultEvent)
+        _nfcStatus.tryEmit(scanCardResult)
     }
 }

@@ -1,36 +1,20 @@
-package com.vogel.nfc_reader.nfc.reader
+package com.vogel.nfc_reader.nfc.implementations
 
 import android.content.Context
-import android.content.Intent
 import android.nfc.tech.IsoDep
-import android.provider.Settings
 import com.github.devnied.emvnfccard.parser.EmvTemplate
 import com.vogel.nfc_reader.nfc.api.CardReader
 import com.vogel.nfc_reader.nfc.mapToCardData
 import com.vogel.nfc_reader.nfc.model.CardData
 import com.vogel.nfc_reader.nfc.model.CardState
 import com.vogel.nfc_reader.nfc.provider.TransceiverProvider
+import com.vogel.nfc_reader.nfc.utils.ACTION_NFC_SETTINGS
 
-internal class CardReaderImpl constructor(
+class ReaderImplementation constructor(
     private val builder: EmvTemplate.Builder,
     private val config: EmvTemplate.Config,
     private val provider: TransceiverProvider,
-    private val intentProvider: NfcIntentProvider
 ) : CardReader {
-
-    companion object {
-        val EMPTY_CARD = CardData(
-            aids = emptyList(),
-            types = emptyList(),
-            expireDate = null,
-            number = null,
-            state = CardState.UNKNOWN,
-            holderFirstName = "NO ENCONTRADO EL NOMBRE",
-            holderLastName = "NO ENCONTRADO EL APELLIDO",
-        )
-    }
-
-    override fun getCard(isoDep: IsoDep): CardData = getCardResult(isoDep).getOrElse { EMPTY_CARD }
 
     /**
      * Get card data from NFC card, and map it to [CardData]
@@ -50,14 +34,9 @@ internal class CardReaderImpl constructor(
     }
 
     /**
-    * Open NFC settings in the device
-    */
+     * Open NFC settings in the device
+     */
     override fun openSettings(context: Context) {
-        context.startActivity(intentProvider.settings())
+        context.startActivity(ACTION_NFC_SETTINGS)
     }
-
-}
-
-internal class NfcIntentProvider {
-    fun settings(): Intent = Intent(Settings.ACTION_NFC_SETTINGS)
 }

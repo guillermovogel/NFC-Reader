@@ -3,7 +3,7 @@ package com.vogel.nfc_reader.nfc.provider
 import android.nfc.tech.IsoDep
 import com.github.devnied.emvnfccard.parser.IProvider
 
-internal class IProviderImpl(private val tag: IsoDep) : IProvider {
+class Provider(private val tag: IsoDep) : IProvider {
     override fun transceive(command: ByteArray): ByteArray? = tag.transceive(command)
 
     override fun getAt(): ByteArray? = with(tag) {

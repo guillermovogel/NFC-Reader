@@ -44,5 +44,26 @@ class CardData(
 
     companion object {
         internal val EXPECTED_DATE_FORMAT = SimpleDateFormat("MM/yy", Locale.US)
+
+        fun fetchCardInformation(cardData: CardData): String = """
+                AID: ${cardData.aids.joinToString(" | ")}
+                Type: ${cardData.types.joinToString(" | ")}
+                State: ${cardData.state}
+                
+                Number: ${cardData.formattedNumber}
+                Expires: ${cardData.formattedDate}
+                
+                Valid: ${cardData.isValid}
+                
+                Holder: ${cardData.holderLastName}
+                
+            """.trimIndent()
+
+        fun fetchErrorInformation(error: Throwable): String = """
+                ERROR
+                Message: ${error.message ?: error.cause?.message}
+                
+            """.trimIndent()
     }
+
 }
