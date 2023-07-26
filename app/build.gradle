@@ -12,7 +12,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,5 +66,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
-    implementation 'com.github.guillermovogel:NFC-Reader:1.0'
+    //implementation 'com.github.guillermovogel:NFC-Reader:1.1'
+    implementation (project(":nfc_reader"))
+
 }
