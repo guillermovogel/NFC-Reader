@@ -4,29 +4,27 @@ import android.content.Context
 import android.nfc.tech.IsoDep
 import com.github.devnied.emvnfccard.parser.EmvTemplate
 import com.vogel.nfc_reader.nfc.api.CardReader
-import com.vogel.nfc_reader.nfc.mapToCardData
-import com.vogel.nfc_reader.nfc.model.CardData
-import com.vogel.nfc_reader.nfc.model.CardState
-import com.vogel.nfc_reader.nfc.provider.TransceiverProvider
+import com.vogel.nfc_reader.nfc.mapToCard
+import com.vogel.nfc_reader.nfc.model.Card
+import com.vogel.nfc_reader.nfc.provider.Provider
 import com.vogel.nfc_reader.nfc.utils.ACTION_NFC_SETTINGS
 
 class ReaderImplementation constructor(
     private val builder: EmvTemplate.Builder,
     private val config: EmvTemplate.Config,
-    private val provider: TransceiverProvider,
 ) : CardReader {
 
     /**
-     * Get card data from NFC card, and map it to [CardData]
+     * Get card data from NFC card, and map it to [Card]
      */
-    override fun getCardResult(isoDep: IsoDep): Result<CardData> {
+    override fun getCardResult(isoDep: IsoDep): Result<Card> {
         return runCatching {
             isoDep.connect()
             builder.setConfig(config)
-                .setProvider(provider.getTransceiver(isoDep))
+                .setProvider(Provider(isoDep))
                 .build()
                 .readEmvCard()
-                .mapToCardData()
+                .mapToCard()
         }
             .also {
                 runCatching { isoDep.close() }

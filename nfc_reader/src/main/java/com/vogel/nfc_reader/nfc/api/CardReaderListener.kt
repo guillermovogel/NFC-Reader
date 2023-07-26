@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
 interface CardReaderListener {
     val nfcStatus: Flow<NFCState>
 
-    fun start(activity: Activity)
-    fun stop(activity: Activity)
-    fun openSettings(context: Context){}
+    fun startReading(activity: Activity)
+    fun stopReading(activity: Activity)
+    fun openSettings(context: Context) {}
 
     companion object {
         fun newInstance(cardReader: CardReader): CardReaderListener {

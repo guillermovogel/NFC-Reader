@@ -35,7 +35,7 @@ class ListenerImplementation constructor(
      * If enabled, then reader mode is activated so that the user can
      * scan their NFC card (debit/credit).
      */
-    override fun start(activity: Activity) {
+    override fun startReading(activity: Activity) {
         adapter = NFCUtils.getNfcAdapter(activity)?.apply {
             // NFC Supported
             if (!isEnabled) {
@@ -68,7 +68,7 @@ class ListenerImplementation constructor(
     /**
      * This function stops the NFC reader from scanning for NFC cards.
      */
-    override fun stop(activity: Activity) {
+    override fun stopReading(activity: Activity) {
         adapter?.disableReaderMode(activity)
     }
 

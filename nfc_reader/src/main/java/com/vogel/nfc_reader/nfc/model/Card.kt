@@ -4,14 +4,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CardData(
-    val aids: List<String>,
-    val types: List<String>,
+data class Card(
     val expireDate: Date?,
     val number: String?,
     val state: CardState,
-    val holderFirstName: String? = "First name not found",
-    val holderLastName: String? = "Lastname not found",
 ) {
 
     var formattedNumber: String? = null
@@ -45,17 +41,13 @@ class CardData(
     companion object {
         internal val EXPECTED_DATE_FORMAT = SimpleDateFormat("MM/yy", Locale.US)
 
-        fun fetchCardInformation(cardData: CardData): String = """
-                AID: ${cardData.aids.joinToString(" | ")}
-                Type: ${cardData.types.joinToString(" | ")}
-                State: ${cardData.state}
+        fun fetchCardInformation(card: Card): String = """
+                State: ${card.state}
                 
-                Number: ${cardData.formattedNumber}
-                Expires: ${cardData.formattedDate}
+                Number: ${card.formattedNumber}
+                Expires: ${card.formattedDate}
                 
-                Valid: ${cardData.isValid}
-                
-                Holder: ${cardData.holderLastName}
+                Valid: ${card.isValid}
                 
             """.trimIndent()
 

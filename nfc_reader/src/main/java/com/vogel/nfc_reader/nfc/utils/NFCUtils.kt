@@ -5,7 +5,7 @@ import android.content.Intent
 import android.nfc.NfcAdapter
 import android.nfc.NfcManager
 import android.provider.Settings
-import com.vogel.nfc_reader.nfc.model.CardData
+import com.vogel.nfc_reader.nfc.model.Card
 
 
 object NFCUtils {
@@ -37,7 +37,7 @@ sealed class NFCState {
     object Disabled : NFCState()
     object NotSupported : NFCState()
     data class Error(val throwable: Throwable) : NFCState()
-    data class Success(val card: CardData) : NFCState()
+    data class Success(val card: Card) : NFCState()
 }
 
 val ACTION_NFC_SETTINGS = Intent(Settings.ACTION_NFC_SETTINGS)

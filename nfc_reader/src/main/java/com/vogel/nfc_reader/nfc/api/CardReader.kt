@@ -3,12 +3,11 @@ package com.vogel.nfc_reader.nfc.api
 import android.content.Context
 import android.nfc.tech.IsoDep
 import com.github.devnied.emvnfccard.parser.EmvTemplate
-import com.vogel.nfc_reader.nfc.model.CardData
-import com.vogel.nfc_reader.nfc.provider.TransceiverProvider
+import com.vogel.nfc_reader.nfc.model.Card
 import com.vogel.nfc_reader.nfc.implementations.ReaderImplementation
 
 interface CardReader {
-    fun getCardResult(isoDep: IsoDep): Result<CardData>
+    fun getCardResult(isoDep: IsoDep): Result<Card>
     fun openSettings(context: Context) {}
 
     companion object {
@@ -24,7 +23,6 @@ interface CardReader {
             return ReaderImplementation(
                 config = config,
                 builder = EmvTemplate.Builder(),
-                provider = TransceiverProvider()
             )
         }
     }
