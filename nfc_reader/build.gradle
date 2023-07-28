@@ -50,13 +50,13 @@ def getVersionName = { ->
 }
 
 def getArtificatId = { ->
-    return "reader" // Replace with library name ID
+    return "nfc_reader" // Replace with library name ID
 }
 
 publishing {
     publications {
         bar(MavenPublication) {
-            groupId 'com.vogel.nfc' // Replace with group ID
+            groupId 'com.vogel.nfc_reader' // Replace with group ID
             artifactId getArtificatId()
             version getVersionName()
             artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
