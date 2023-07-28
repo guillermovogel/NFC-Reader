@@ -40,7 +40,6 @@ fun NFCReaderTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
     MaterialTheme(
         colors = colors,
         typography = Typography,
-        shapes = Shapes,
         content = content
     )
 }
